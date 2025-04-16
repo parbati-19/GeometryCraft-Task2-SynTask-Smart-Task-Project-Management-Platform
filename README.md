@@ -1,0 +1,1 @@
+# GeometryCraft-Task2-SynTask-Smart-Task-Project-Management-Platform
