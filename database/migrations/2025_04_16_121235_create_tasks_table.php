@@ -19,7 +19,7 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->date('due_date')->nullable();
             $table->enum('category', ['Work','Personal'])->default('Work');
-            $table->enum('status', ['Active','In_progress','Complete'])->default('Active');
+            $table->enum('status', ['Not-Started','Active','In_progress','Complete'])->default('Active');
             $table->timestamps();
         });
     }

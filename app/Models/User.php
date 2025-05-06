@@ -22,6 +22,8 @@ class User extends Authenticatable
         'lastname',
         'email',
         'password',
+        'provider_id',
+        'provider_name',
     ];
 
     /**
@@ -49,5 +51,9 @@ class User extends Authenticatable
 
     public function projects(){
         return $this->hasMany(Project::class);
+    }
+
+    public function tasks(){
+        return $this->hasMany(Task::class);
     }
 }

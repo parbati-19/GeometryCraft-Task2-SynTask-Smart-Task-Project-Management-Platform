@@ -24,15 +24,14 @@ class LoginController extends Controller
     {
         $credientials = $request->validate([
             'email' => 'required|email',
-            'password' => 'required|min:8',
+            'password' => 'required',
         ]);
         if (Auth::attempt($credientials, $request->remember)) {
             $request->session()->regenerate();
             return redirect()->intended('/dashboard');
         }
         return back()->withErrors([
-            'email'=> 'Invalid Email',
-            'password'=>'Invalid password',
-        ]);
+            'email'=> 'Invalid Email or password',
+        ])->withInput();
     }
 }

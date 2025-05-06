@@ -14,7 +14,7 @@ class ProjectController extends Controller
     public function index()
     {
         $projects = Project::where('user_id', Auth::id())->get();
-        return view("project.index", compact('$projects'));
+        return view('projects.index', compact('projects'));
     }
 
     /**
@@ -31,19 +31,19 @@ class ProjectController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|255',
-            'description' => 'nullable|text',
-            'completion_status' => 'nullable|string',
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'completion_status' => 'required|string|in:Active,In Progress,Complete', // Added specific allowed values
         ]);
 
         $project = Project::create([
-            'user_id'=> $request->Auth::id(),
+            'user_id' => Auth::id(),
             'name' => $request->name,
             'description' => $request->description,
-            'completion_status' => $request->completion_status ?? 'Active',
+            'completion_status' => $request->completion_status ?? 'Active', // Default to 'Active' if not provided
         ]);
 
-        return redirect()->route('projects.index')->with('success', 'project created successfully');
+        return redirect()->route('projects.index')->with('success', 'Project created successfully');
     }
 
     /**
@@ -51,7 +51,8 @@ class ProjectController extends Controller
      */
     public function show(Project $project)
     {
-        // 
+        // You can add any additional logic here if needed
+        return view('projects.show', compact('project'));
     }
 
     /**
@@ -59,7 +60,7 @@ class ProjectController extends Controller
      */
     public function edit(Project $project)
     {
-        return view('projects.edit', compact('$project'));
+        return view('projects.edit', compact('project'));
     }
 
     /**
@@ -68,13 +69,14 @@ class ProjectController extends Controller
     public function update(Request $request, Project $project)
     {
         $request->validate([
-            'name' => 'required|string|255',
-            'description' => 'nullable|text',
-            'completion_status' => 'nullable|string',
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'completion_status' => 'required|string|in:Active,In Progress,Complete', 
         ]);
 
         $project->update($request->all());
-        return redirect()->route('projects.index')->with('success', 'project created successfully');
+
+        return redirect()->route('projects.index')->with('success', 'Project updated successfully');
     }
 
     /**
@@ -83,6 +85,6 @@ class ProjectController extends Controller
     public function destroy(Project $project)
     {
         $project->delete();
-        return redirect()->route('projects.index')->with('success', 'project deleted successfully');
+        return redirect()->route('projects.index')->with('success', 'Project deleted successfully');
     }
 }

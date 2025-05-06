@@ -1,109 +1,119 @@
 @extends('layouts.app')
-@section('content')
 
-    <div class="flex flex-col items-center justify-center max-h-fullscreen max-w-fullscreen">
-        @if (!session('success'))
-            <p>{{ session('success') }}</p>
-        @endif
-        <div class="flex h-screen">
-            <!-- Sidebar -->
-            <div class="w-64 bg-white-500 shadow-md p-5">
-                <div class="flex flex-rol items-start justify-between space-x-1 ">
-                  
-                        <img class="h-10 w-10" src="{{asset('img/logo1.png')}}" alt="logo">
-                    
-                    <h2 class="text-xl font-bold text-purple-600 mb-8">SynTask</h2>
-                  
-                </div>
-                <nav class="space-y-4">
-                    <a href="#" class="block text-gray-700 font-medium hover:text-purple-600">Dashboard</a>
-                    <a href="#" class="block text-gray-700 hover:text-purple-600">Tasks</a>
-                    <a href="#" class="block text-gray-700 hover:text-purple-600">Projects</a>
-                    <a href="#" class="block text-gray-700 hover:text-purple-600">Tags</a>
-                    <div class="border-t my-4"></div>
-                    <a href="#" class="block text-gray-700 hover:text-purple-600">Settings</a>
-                    <a href="#" class="block text-gray-700 hover:text-purple-600">Profile</a>
-                </nav>
+@section('content')
+    <div class="min-h-screen flex bg-grey-100">
+
+        <!-- Sidebar -->
+        <div class=" flex flex-col items-center  w-64 bg-white-800 text-black shadow">
+            <div class="flex items-center justify-center shadow w-64 h-18">
+                <img src="{{asset('img/logo1.png')}}" alt="logo" class="w-18 h-auto mx-auto ">
+                <div class="text-2xl font-bold ">SynTask</div>
+                <hr>
             </div>
 
-            <!-- Main Content -->
-            <div class="flex-1 p-8 overflow-auto">
-                <!-- Header -->
-                <div class="flex justify-between items-center mb-6">
-                    <div>
-                        <h1 class="text-2xl font-semibold">Dashboard</h1>
-                        <p class="text-sm text-gray-500">Welcome back, {{auth()->user()->firstname}}!</p>
-                    </div>
-                    <div class="flex gap-2">
-                        <button class="bg-purple-600 text-white px-4 py-2 rounded-lg">+ New Task</button>
-                        <button class="bg-indigo-100 text-purple-600 px-4 py-2 rounded-lg">+ New Project</button>
-                    </div>
-                </div>
 
-                <!-- Search & Filters -->
-                <div class="flex items-center gap-4 mb-8">
-                    <input type="text" placeholder="Search tasks and projects..."
-                        class="flex-1 border border-gray-300 rounded-lg px-4 py-2">
-                    <select class="border border-gray-300 rounded-lg px-2 py-2 text-sm">
-                        <option>Priority</option>
-                    </select>
-                    <select class="border border-gray-300 rounded-lg px-2 py-2 text-sm">
-                        <option>Status</option>
-                    </select>
-                    <select class="border border-gray-300 rounded-lg px-2 py-2 text-sm">
-                        <option>Date</option>
-                    </select>
-                </div>
+            <div class="flex flex-col items-center space-y-4 py-8">
+                <a href="{{ route('dashboard') }}" class="block hover:bg-gray-700 p-2 rounded">Dashboard</a>
+                <a href="{{ route('projects.index') }}" class="block hover:bg-gray-700 p-2 rounded">Projects</a>
+                <a href="{{ route('tasks.index') }}" class="block hover:bg-gray-700 p-2 rounded">Tasks</a>
+                <a href="{{ route('profile.edit') }}" class="block hover:bg-gray-700 p-2 rounded">Profile</a>
+            </div>
 
-                <!-- Recent Tasks -->
-                <div class="mb-10">
-                    <h2 class="text-lg font-medium mb-4">Recent Tasks</h2>
-                    <div class="grid grid-cols-2 gap-6">
-                        <div class="bg-white p-4 rounded-lg border-l-4 border-red-500">
-                            <div class="flex justify-between">
-                                <h3 class="font-semibold">Update API Documentation</h3>
-                                <span class="text-xs text-white bg-red-500 px-2 py-1 rounded-full">Urgent</span>
-                            </div>
-                            <p class="text-sm text-gray-500">📅 Due Today</p>
-                        </div>
-                        <div class="bg-white p-4 rounded-lg border-l-4 border-yellow-400">
-                            <div class="flex justify-between">
-                                <h3 class="font-semibold">Design System Updates</h3>
-                                <span class="text-xs text-white bg-yellow-400 px-2 py-1 rounded-full">In Progress</span>
-                            </div>
-                            <p class="text-sm text-gray-500">📅 Due in 3 days</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Active Projects -->
-                <div>
-                    <h2 class="text-lg font-medium mb-4">Active Projects</h2>
-                    <div class="grid grid-cols-3 gap-6">
-                        <!-- Project Card -->
-                        <div class="bg-white p-4 rounded-lg shadow-sm">
-                            <div class="flex justify-between items-center">
-                                <h3 class="font-semibold text-sm">Mobile App Redesign</h3>
-                                <span class="text-xs bg-indigo-200 text-indigo-800 px-2 py-1 rounded-full">In
-                                    Progress</span>
-                            </div>
-                            <p class="text-sm text-gray-500 mt-2">Redesigning the mobile app interface...</p>
-                            <div class="mt-4">
-                                <div class="text-xs text-gray-400 mb-1">Progress</div>
-                                <div class="w-full bg-gray-200 h-2 rounded">
-                                    <div class="bg-purple-600 h-2 rounded" style="width: 75%;"></div>
-                                </div>
-                                <div class="text-right text-xs text-gray-400 mt-1">Due Mar 25, 2025</div>
-                            </div>
-                        </div>
-
-                        <!-- Add two more project cards similarly -->
-                    </div>
-                </div>
-
+            <div class="mt-5 flex items-center">
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button class="w-full text-left hover:bg-purple-600 p-2 rounded ">Logout</button>
+                </form>
             </div>
         </div>
 
-        
+        <!-- Main content -->
+        <div class="flex-1 flex flex-col">
+            <!-- Header -->
+            <div class="bg-white shadow p-4 flex justify-between items-center">
+                <div>
+                    <h1 class="text-xl font-semibold text-gray-800">Welcome, {{ Auth::user()->firstname }} 👋</h1>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <img src="https://ui-avatars.com/api/?name={{ Auth::user()->firstname}}+{{ Auth::user()->lastname}}"
+                        class="bg-black w-10 h-10 rounded-full" alt="User Avatar">
+                </div>
+            </div>
+
+            <!-- Content area -->
+            <div class="my-8 mx-8">
+                <h2 class="text-2xl font-semibold mb-6 text-indigo-600 ">Active Projects</h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mx-auto">
+                    @foreach($projects as $project)
+                        <div class="bg-white rounded-md shadow-md p-4">
+                            <h3 class="text-xl mb-4 font-semibold">{{ $project->name }}</h3>
+                            <p class="text-black mb-2 font-mono">{{ $project->description }}</p>
+                            <p class="text-black">Status: <span class="font-semibold">{{ $project->status }}</span></p>
+                            @php
+                                $statusPercent = match ($project->completion_status) {
+                                    'Active' => 0,
+                                    'In Progress' => 50,
+                                    'Complete' => 100,
+                                    default => 0,
+                                };
+                            @endphp
+
+                            <!-- Progress Bar -->
+                            <div class="w-full bg-gray-200 rounded-full h-3 mb-2 mt-2">
+                                <div class="bg-blue-500 h-3 rounded-full" style="width: {{ $statusPercent }}%"></div>
+                            </div>
+                            <p class="text-sm text-gray-500 mb-4">{{ $statusPercent }}% complete</p>
+                            <a href="{{ route('projects.show', $project->id) }}"
+                                class="text-white py-2 px-2 mb-2 border rounded-full bg-gray-600 hover:bg-gray-700">View
+                                Project</a>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+
+            <div class="my-8 mx-8">
+                <h2 class="text-2xl font-semibold mb-6 text-indigo-600 ">Recent tasks</h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mx-auto">
+                    @foreach ($tasks as $task)
+                        <div class="bg-white p-4 shadow rounded mb-4">
+                            <h2 class="text-xl font-semibold">{{ $task->title }}</h2>
+
+                            @php
+                                // Map ENUM status to a percentage
+                                $statusPercent = match ($task->status) {
+                                    'Not Started' => 0,
+                                    'Active' => 30,
+                                    'In Progress' => 65,
+                                    'Complete' => 100,
+                                    default => 0,
+                                };
+
+                                // Choose colors for progress
+                                $color = match (true) {
+                                    $statusPercent <= 30 => 'bg-red-500',
+                                    $statusPercent <= 70 => 'bg-yellow-400',
+                                    default => 'bg-green-500',
+                                };
+                            @endphp
+
+                            <!-- Progress Bar -->
+                            <div class="w-full bg-gray-200 rounded-full h-3 mb-2">
+                                <div class="{{ $color }} h-3 rounded-full" style="width: {{ $statusPercent }}%"></div>
+                            </div>
+                            <p class="text-sm text-gray-500">{{ $statusPercent }}% complete -
+                                <strong>{{ $task->status }}</strong>
+                            </p>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+
+        {{-- <div>
+            <form action="" method="post">
+                <button>Logout</button>
+            </form>
+        </div> --}}
+
     </div>
 @endsection
